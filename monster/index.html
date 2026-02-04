@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <title>Monster</title>
+    <style>
+      body {
+        position: fixed;
+        box-sizing: border-box;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0.5rem;
+        background-color: black;
+        display: grid;
+        place-items: center;
+      }
+      #description {
+        max-width: 36rem;
+        overflow-y: auto;
+        text-align: center;
+        text-wrap: balance;
+        font-size: 1.5rem;
+        line-height: 1.8;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="description"></div>
+    <script>
+
+      const backgroundImages = [
+        './images/BKG056.JPG',
+        './images/BKG068.JPG',
+        './images/BKG166.JPG',
+        './images/CKG241.JPG',
+        './images/CKG262.JPG',
+        './images/CKG272.JPG',
+      ];
+
+      // Linear congruential generator
+      function lcg(seed) {
+
+        var state = seed >>> 0;  // Force unsigned 32-bit
+
+        return function () {
+          // Constants from Numerical Recipes
+          state = (1664525 * state + 1013904223) >>> 0;
+          return state;
+        };
+      }
+
+      function getRand() {
+        const now = Date.now();
+        const seed = Math.floor(now / 600e3);
+        return lcg(seed);
+      }
+
+      function pickRandom(options, rand) {
+        return options[rand() % options.length];
+      }
+
+      function setBackground(rand) {
+        const imageUrl = pickRandom(backgroundImages, rand);
+        document.body.style.backgroundImage = `url('${imageUrl}')`;
+      }
+
+      function setDescription(rand) {
+
+        const [wingsText, wingsFlags] = pickRandom(
+          [
+            [`Dragonfly wings`, {}],
+            [`Bat wings`, {}],
+            [`Bird wings`, {}],
+            [`No wings`, { noWings: true }],
+            [`No wings`, { noWings: true }],
+            [`No wings`, { noWings: true }],
+          ],
+          rand
+        );
+
+        const [limbsText, limbsFlags] = pickRandom(
+          [
+            [`No limbs (i.e., ${wingsFlags.noWings ? `slithering` : `flying`}`, { maybeNoTail: true }],
+            [`Two arms or two legs`, { maybeNoTail: true }],
+            [`Two arms and two legs`, { maybeNoTail: true }],
+            [`Two arms and two legs`, { maybeNoTail: true }],
+            [`Four legs`, {}],
+            [`Six or eight legs`, {}],
+          ],
+          rand
+        );
+
+        const bodyText = pickRandom(
+          [
+            `Shell/exoskeleton body`,
+            `Scaled/feathered body`,
+            `Hairy body`,
+            `Spiny body`,
+            `Furry body`,
+            `Bare body`,
+          ],
+          rand
+        );
+
+        const tailText = (
+          limbsFlags.maybeNoTail && Math.random() < 0.5
+            ? (wingsFlags.noWings ? `No tail` : `Tail matches wings`)
+            : pickRandom(
+                [
+                  `Club tail`,
+                  `Stinger tail`,
+                  `Spiked tail`,
+                  `Arrowhead tip tail`,
+                  `Tufted tail`,
+                  `Stub tail`,
+                ],
+                rand
+              )
+        );
+
+        const limbsTypeText = pickRandom(
+          [
+            `Hooves`,
+            `Tentacles for arms/legs`,
+            `Bird legs`,
+            `Crab or scorpion legs/claws`,
+            `Elephant or tortoise-like legs`,
+            `Webbed hands/feet`,
+          ],
+          rand
+        );
+
+        const eyesText = pickRandom(
+          [
+            `One eye`,
+            `Two eyes`,
+            `Two eyes`,
+            `Two eyes`,
+            `Three eyes`,
+            `Many eyes`,
+          ],
+          rand
+        );
+
+        const hornsText = pickRandom(
+          [
+            `No horns`,
+            `No horns`,
+            `One horn`,
+            `Two horns`,
+            `Two horns`,
+            `Three horns`,
+          ],
+          rand
+        );
+
+        const mouthText = pickRandom(
+          [
+            `Mandibles`,
+            `Tentacles for a mouth`,
+            `Beak`,
+            `Fangs`,
+            `Shark or horse teeth`,
+            `Tusks`,
+          ],
+          rand
+        );
+
+        description.textContent = [
+          limbsText,
+          wingsText,
+          bodyText,
+          limbsTypeText,
+          tailText,
+          eyesText,
+          hornsText,
+          mouthText,
+        ].join(' - ');
+      }
+
+      const rand = getRand();
+
+      setBackground(rand);
+      setDescription(rand);
+    </script>
+  </body>
+</html>
