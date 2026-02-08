@@ -68,7 +68,9 @@
 
         const [limbsText, limbsFlags] = pickRandom(
           [
-            [`No limbs (i.e., ${wingsFlags.noWings ? `slithering` : `flying`}`, { maybeNoTail: true }],
+            [
+              `No limbs (i.e., ${wingsFlags.noWings ? `slithering` : `flying`}`,
+              { noLimbs: true }],
             [`Two arms or two legs`, { maybeNoTail: true }],
             [`Two arms and two legs`, { maybeNoTail: true }],
             [`Two arms and two legs`, { maybeNoTail: true }],
@@ -106,16 +108,20 @@
               )
         );
 
-        const limbsTypeText = pickRandom(
-          [
-            `Hooves`,
-            `Tentacles for arms/legs`,
-            `Bird legs`,
-            `Crab or scorpion legs/claws`,
-            `Elephant or tortoise-like legs`,
-            `Webbed hands/feet`,
-          ],
-          seed
+        const limbsTypeText = (
+          limbsFlags.noLimbs
+            ? null
+            : pickRandom(
+              [
+                `Hooves`,
+                `Tentacles for arms/legs`,
+                `Bird legs`,
+                `Crab or scorpion legs/claws`,
+                `Elephant or tortoise-like legs`,
+                `Webbed hands/feet`,
+              ],
+              seed
+            )
         );
 
         const eyesText = pickRandom(
@@ -163,11 +169,13 @@
           eyesText,
           hornsText,
           mouthText,
-        ].join(' - ');
+        ].filter(Boolean).join(' - ');
       }
+
       const seed = {
         value: getSeed(),
       };
+
       setBackground(seed);
       setDescription(seed);
     </script>
