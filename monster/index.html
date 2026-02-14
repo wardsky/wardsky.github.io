@@ -69,8 +69,8 @@
         const [limbsText, limbsFlags] = pickRandom(
           [
             [
-              `No limbs (i.e., ${wingsFlags.noWings ? `slithering` : `flying`}`,
-              { noLimbs: true }],
+              `No limbs (i.e., ${wingsFlags.noWings ? `slithering` : `flying`})`,
+              { maybeNoTail: true, noLimbs: true }],
             [`Two arms or two legs`, { maybeNoTail: true }],
             [`Two arms and two legs`, { maybeNoTail: true }],
             [`Two arms and two legs`, { maybeNoTail: true }],
@@ -86,7 +86,7 @@
             `Scaled/feathered body`,
             `Hairy body`,
             `Spiny body`,
-            `Bare body`,
+            `Furry body`,
             `Bare body`,
           ],
           seed
@@ -94,15 +94,15 @@
 
         const tailText = (
           limbsFlags.maybeNoTail && Math.random() < 0.5
-            ? `No tail`
+            ? (wingsFlags.noWings ? `No tail` : `Tail matches wings`)
             : pickRandom(
                 [
                   `Club tail`,
                   `Stinger tail`,
                   `Spiked tail`,
-                  `Tail matches body`,
-                  `Tail matches body`,
-                  wingsFlags.noWings ? `No tail` : `Tail matches wings`,
+                  `Arrowhead-tip tail`,
+                  `Tufted tail`,
+                  `Stubby tail`,
                 ],
                 seed
               )
